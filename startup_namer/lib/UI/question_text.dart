@@ -39,6 +39,12 @@ class QuestionTextState extends State<QuestionText>
   }
 
   @override
+  void dispose() {
+    _fontSizeAnimationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return new Material(
         color: Colors.white,

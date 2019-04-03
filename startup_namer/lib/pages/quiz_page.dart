@@ -5,6 +5,7 @@ import '../utils/quiz.dart';
 import '../UI/answer_button.dart';
 import '../UI/question_text.dart';
 import '../UI/correct_wrong_overlay.dart';
+import './score_page.dart';
 
 class QuizPage extends StatefulWidget {
   @override
@@ -54,18 +55,21 @@ class QuizPageState extends State<QuizPage> {
         ),
         overlayShouldBeVisible == true
             ? new CorrectWrongOverlay(isCorrect, () {
-                currentQuestion = quiz.nextQuestion;
-                if (currentQuestion == null) {
-                  this.setState(() {
-                    overlayShouldBeVisible = false;
-                  });
-                } else {
-                  this.setState(() {
-                    overlayShouldBeVisible = false;
-                    questionText = currentQuestion.question;
-                    questionNumber = quiz.questionNumber;
-                  });
+                // 没有题目了
+                if (quiz.length == questionNumber) {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      new MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              new ScorePage(quiz.score, quiz.length)),
+                      (Route route) => route == null);
+                  return;
                 }
+                currentQuestion = quiz.nextQuestion;
+                this.setState(() {
+                  overlayShouldBeVisible = false;
+                  questionText = currentQuestion.question;
+                  questionNumber = quiz.questionNumber;
+                });
               })
             : new Container()
       ],
